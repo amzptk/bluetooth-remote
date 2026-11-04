@@ -115,13 +115,20 @@
             android:gravity="center"
             android:layout_marginBottom="16dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPower"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:text="⏻"
-                android:textSize="28sp"
                 android:backgroundTint="@color/power_red"
+                app:icon="@drawable/ic_power"
+                app:iconSize="36dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                app:cornerRadius="40dp"
                 style="@style/Widget.Material3.Button"
                 android:enabled="false"/>
 
@@ -156,33 +163,41 @@
                     android:orientation="horizontal"
                     android:gravity="center">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnVolDown"
                         android:layout_width="0dp"
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="8dp"
-                        android:text="🔉 Vol -"
+                        android:text="Vol -"
+                        app:icon="@drawable/ic_volume_down"
+                        app:iconSize="20dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMute"
                         android:layout_width="0dp"
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="8dp"
-                        android:text="🔇"
-                        android:textSize="22sp"
+                        android:text="Mute"
+                        app:icon="@drawable/ic_volume_mute"
+                        app:iconSize="20dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnVolUp"
                         android:layout_width="0dp"
                         android:layout_height="56dp"
                         android:layout_weight="1"
-                        android:text="🔊 Vol +"
+                        android:text="Vol +"
+                        app:icon="@drawable/ic_volume_up"
+                        app:iconSize="20dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
@@ -221,12 +236,14 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_marginBottom="4dp">
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnUp"
                         android:layout_width="80dp"
                         android:layout_height="56dp"
-                        android:text="▲"
-                        android:textSize="22sp"
+                        app:icon="@drawable/ic_arrow_up"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
                 </LinearLayout>
@@ -237,16 +254,18 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_marginBottom="4dp">
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnLeft"
                         android:layout_width="80dp"
                         android:layout_height="56dp"
-                        android:text="◀"
-                        android:textSize="22sp"
+                        app:icon="@drawable/ic_arrow_left"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
                         android:layout_marginEnd="4dp"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnOk"
                         android:layout_width="80dp"
                         android:layout_height="56dp"
@@ -256,12 +275,14 @@
                         android:layout_marginEnd="4dp"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button"/>
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnRight"
                         android:layout_width="80dp"
                         android:layout_height="56dp"
-                        android:text="▶"
-                        android:textSize="22sp"
+                        app:icon="@drawable/ic_arrow_right"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
                 </LinearLayout>
@@ -272,12 +293,14 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_marginBottom="8dp">
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnDown"
                         android:layout_width="80dp"
                         android:layout_height="56dp"
-                        android:text="▼"
-                        android:textSize="22sp"
+                        app:icon="@drawable/ic_arrow_down"
+                        app:iconSize="28dp"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
                 </LinearLayout>
@@ -288,33 +311,41 @@
                     android:layout_height="wrap_content"
                     android:gravity="center">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnBack"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="4dp"
-                        android:text="⬅ Back"
+                        android:text="Back"
+                        app:icon="@drawable/ic_arrow_back"
+                        app:iconSize="18dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnHome"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="4dp"
-                        android:text="🏠"
-                        android:textSize="20sp"
+                        android:text="Home"
+                        app:icon="@drawable/ic_home"
+                        app:iconSize="18dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMenu"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:layout_weight="1"
-                        android:text="☰ Menu"
+                        android:text="Menu"
+                        app:icon="@drawable/ic_menu"
+                        app:iconSize="18dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
@@ -352,32 +383,41 @@
                     android:layout_height="wrap_content"
                     android:gravity="center">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnPlay"
                         android:layout_width="0dp"
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="4dp"
-                        android:text="▶ Play"
+                        android:text="Play"
+                        app:icon="@drawable/ic_play"
+                        app:iconSize="20dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnPause"
                         android:layout_width="0dp"
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:layout_marginEnd="4dp"
-                        android:text="⏸ Pause"
+                        android:text="Pause"
+                        app:icon="@drawable/ic_pause"
+                        app:iconSize="20dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnStop"
                         android:layout_width="0dp"
                         android:layout_height="56dp"
                         android:layout_weight="1"
-                        android:text="⏹ Stop"
+                        android:text="Stop"
+                        app:icon="@drawable/ic_stop"
+                        app:iconSize="20dp"
+                        app:iconGravity="textStart"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
 
