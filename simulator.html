@@ -3,14 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bluetooth Remote & Smart TV Simulator</title>
+  <title>Bluetooth Remote & Smart TV Simulator (Touchpad & Shortcuts)</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
-    /* Custom animations & subtle glows */
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.8; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.05); }
-    }
     .tv-bezel {
       box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
     }
@@ -30,14 +25,13 @@
     <header class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-sm">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-500 flex items-center justify-center font-bold">
-          <!-- Bluetooth Icon SVG -->
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l6 5-6 5V5zm0 14l6-5-6-5v10zM15 10l-6-5M15 14l-6 5" />
           </svg>
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight">Bluetooth Remote Interactive Simulation</h1>
-          <p class="text-xs text-[var(--muted-foreground)]">Protokol RFCOMM / SPP Serial Byte Emulation & Smart TV Receiver</p>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight">Bluetooth Remote &amp; Android TV / STB Simulator</h1>
+          <p class="text-xs text-[var(--muted-foreground)]">Navigasi Touchpad Gestur &amp; Shortcut Aplikasi TV yang Dapat Dikustomisasi</p>
         </div>
       </div>
 
@@ -45,7 +39,7 @@
       <div class="flex items-center gap-2 text-xs">
         <div class="flex items-center gap-2 bg-[var(--background)] border border-[var(--border)] px-3 py-1.5 rounded-lg">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" id="bt-link-led"></span>
-          <span class="font-medium" id="bt-link-text">RFCOMM Connected (HC-05)</span>
+          <span class="font-medium" id="bt-link-text">RFCOMM Connected (Samsung S23 &rarr; TV)</span>
         </div>
         <button id="btn-toggle-sound" class="btn-press bg-[var(--background)] border border-[var(--border)] px-3 py-1.5 rounded-lg hover:border-blue-500 flex items-center gap-1.5">
           <span id="sound-icon">🔊</span> Audio Feedback
@@ -74,7 +68,7 @@
               <span class="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" id="app-status-dot"></span>
               <div>
                 <div class="text-xs font-semibold leading-tight" id="app-status-title">Terhubung</div>
-                <div class="text-[12px] text-slate-400" id="app-device-name">Smart TV Living Room</div>
+                <div class="text-[12px] text-slate-400" id="app-device-name">Samsung S23 &bull; TV Box 4K</div>
               </div>
             </div>
             <button id="app-reconnect-btn" class="btn-press text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded-md border border-slate-700">
@@ -83,92 +77,139 @@
           </div>
 
           <!-- Top Row: POWER Button -->
-          <div class="flex justify-between items-center mb-4 px-2">
-            <div class="text-xs text-slate-400 font-mono tracking-wider">BLUETOOTH REMOTE</div>
+          <div class="flex justify-between items-center mb-3 px-2">
+            <div class="text-xs text-slate-400 font-mono tracking-wider">SAMSUNG REMOTE</div>
             <button id="cmd-power" data-cmd="POWER" data-hex="0x50" data-char="P" class="btn-press w-11 h-11 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-900/40 border border-red-400/30">
-              <!-- Power Icon SVG -->
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 11-12.728 0M12 2v10" />
               </svg>
             </button>
           </div>
 
-          <!-- Directional Pad (D-Pad) Area -->
-          <div class="my-4 flex justify-center">
-            <div class="relative w-52 h-52 bg-slate-800/90 rounded-full p-2 border border-slate-700 shadow-inner flex items-center justify-center">
-              
+          <!-- Navigation Mode Switcher: D-Pad vs Touchpad -->
+          <div class="flex items-center justify-between bg-slate-800/80 p-1 rounded-xl mb-3 border border-slate-700">
+            <button id="tab-dpad" class="flex-1 py-1 px-2 rounded-lg text-xs font-bold bg-blue-600 text-white transition-all flex items-center justify-center gap-1">
+              <span>🎮 D-Pad</span>
+            </button>
+            <button id="tab-touchpad" class="flex-1 py-1 px-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1">
+              <span>👆 Touchpad</span>
+            </button>
+          </div>
+
+          <!-- D-Pad Container -->
+          <div id="sim-dpad-container" class="my-2 flex justify-center">
+            <div class="relative w-48 h-48 bg-slate-800/90 rounded-full p-2 border border-slate-700 shadow-inner flex items-center justify-center">
               <!-- UP -->
-              <button id="cmd-up" data-cmd="UP" data-hex="0x41" data-char="A" class="btn-press absolute top-2 w-16 h-12 bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white rounded-t-2xl flex items-center justify-center shadow">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+              <button id="cmd-up" data-cmd="UP" data-hex="0x41" data-char="A" class="btn-press absolute top-2 w-14 h-11 bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white rounded-t-2xl flex items-center justify-center shadow">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
               </button>
-              
               <!-- DOWN -->
-              <button id="cmd-down" data-cmd="DOWN" data-hex="0x42" data-char="B" class="btn-press absolute bottom-2 w-16 h-12 bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white rounded-b-2xl flex items-center justify-center shadow">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <button id="cmd-down" data-cmd="DOWN" data-hex="0x42" data-char="B" class="btn-press absolute bottom-2 w-14 h-11 bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white rounded-b-2xl flex items-center justify-center shadow">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </button>
-
               <!-- LEFT -->
-              <button id="cmd-left" data-cmd="LEFT" data-hex="0x43" data-char="C" class="btn-press absolute left-2 w-12 h-16 bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white rounded-l-2xl flex items-center justify-center shadow">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              <button id="cmd-left" data-cmd="LEFT" data-hex="0x43" data-char="C" class="btn-press absolute left-2 w-11 h-14 bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white rounded-l-2xl flex items-center justify-center shadow">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
               </button>
-
               <!-- RIGHT -->
-              <button id="cmd-right" data-cmd="RIGHT" data-hex="0x44" data-char="D" class="btn-press absolute right-2 w-12 h-16 bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white rounded-r-2xl flex items-center justify-center shadow">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+              <button id="cmd-right" data-cmd="RIGHT" data-hex="0x44" data-char="D" class="btn-press absolute right-2 w-11 h-14 bg-slate-700 hover:bg-blue-600 text-slate-200 hover:text-white rounded-r-2xl flex items-center justify-center shadow">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
               </button>
-
               <!-- CENTER OK -->
-              <button id="cmd-ok" data-cmd="OK" data-hex="0x45" data-char="E" class="btn-press w-18 h-18 w-20 h-20 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm tracking-wider shadow-lg flex items-center justify-center border-2 border-blue-400/40">
+              <button id="cmd-ok" data-cmd="OK" data-hex="0x45" data-char="E" class="btn-press w-16 h-16 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm tracking-wider shadow-lg flex items-center justify-center border-2 border-blue-400/40">
                 OK
               </button>
             </div>
           </div>
 
-          <!-- Navigation Control Buttons (BACK, HOME, MENU) -->
+          <!-- Touchpad Container (Interactive Surface) -->
+          <div id="sim-touchpad-container" class="hidden my-2 flex justify-center">
+            <div id="sim-touchpad-surface" class="w-full h-48 bg-slate-950 rounded-2xl border-2 border-dashed border-slate-700 hover:border-blue-500 relative flex flex-col items-center justify-center select-none cursor-crosshair overflow-hidden shadow-inner">
+              <!-- Direction indicator text inside Touchpad -->
+              <span id="touch-ind-up" class="absolute top-2 text-slate-600 text-xs font-bold transition-all">▲ ATAS</span>
+              <span id="touch-ind-down" class="absolute bottom-2 text-slate-600 text-xs font-bold transition-all">▼ BAWAH</span>
+              <span id="touch-ind-left" class="absolute left-3 text-slate-600 text-xs font-bold transition-all">◀ KIRI</span>
+              <span id="touch-ind-right" class="absolute right-3 text-slate-600 text-xs font-bold transition-all">KANAN ▶</span>
+              
+              <!-- Touch Pointer Ripple -->
+              <div id="sim-touch-pointer" class="w-10 h-10 rounded-full bg-blue-500/30 border border-blue-400 absolute pointer-events-none opacity-0 transition-opacity"></div>
+              
+              <div class="text-center pointer-events-none">
+                <div class="text-xs font-bold text-slate-200">Touchpad Surface</div>
+                <div class="text-[12px] text-slate-500 mt-1">Geser (Swipe) untuk Arah<br>Ketuk (Click) untuk OK</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Control Buttons (BACK, HOME, MENU) with Samsung vertical icon-above-text -->
           <div class="grid grid-cols-3 gap-2 mb-3">
-            <button id="cmd-back" data-cmd="BACK" data-hex="0x46" data-char="F" class="btn-press py-2.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-              <span>BACK</span>
+            <button id="cmd-back" data-cmd="BACK" data-hex="0x46" data-char="F" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
+              <svg class="w-4 h-4 text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+              <span>Back</span>
             </button>
-            <button id="cmd-home" data-cmd="HOME" data-hex="0x47" data-char="G" class="btn-press py-2.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-              <span>HOME</span>
+            <button id="cmd-home" data-cmd="HOME" data-hex="0x47" data-char="G" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
+              <svg class="w-4 h-4 text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+              <span>Home</span>
             </button>
-            <button id="cmd-menu" data-cmd="MENU" data-hex="0x48" data-char="H" class="btn-press py-2.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-              <span>MENU</span>
+            <button id="cmd-menu" data-cmd="MENU" data-hex="0x48" data-char="H" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
+              <svg class="w-4 h-4 text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+              <span>Menu</span>
             </button>
+          </div>
+
+          <!-- Customizable App Shortcuts Card -->
+          <div class="bg-slate-800/90 rounded-2xl p-2.5 mb-3 border border-slate-700">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-300">Aplikasi TV / STB</span>
+              <button id="btn-edit-shortcuts-sim" class="text-[12px] bg-slate-700 hover:bg-blue-600 text-white px-2 py-0.5 rounded border border-slate-600">
+                ⚙ Ubah
+              </button>
+            </div>
+            <div class="grid grid-cols-2 gap-2" id="sim-shortcuts-grid">
+              <button class="btn-press py-2 px-2 rounded-xl text-xs font-bold text-white bg-red-600 shadow sim-shortcut-btn" data-slot="0">
+                YouTube
+              </button>
+              <button class="btn-press py-2 px-2 rounded-xl text-xs font-bold text-white bg-red-700 shadow sim-shortcut-btn" data-slot="1">
+                Netflix
+              </button>
+              <button class="btn-press py-2 px-2 rounded-xl text-xs font-bold text-white bg-pink-600 shadow sim-shortcut-btn" data-slot="2">
+                Vidio
+              </button>
+              <button class="btn-press py-2 px-2 rounded-xl text-xs font-bold text-white bg-blue-600 shadow sim-shortcut-btn" data-slot="3">
+                Disney+
+              </button>
+            </div>
           </div>
 
           <!-- Volume Bar (VOL-, MUTE, VOL+) -->
           <div class="grid grid-cols-3 gap-2 mb-3">
-            <button id="cmd-voldown" data-cmd="VOLUME_DOWN" data-hex="0x4D" data-char="M" class="btn-press py-2.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
+            <button id="cmd-voldown" data-cmd="VOLUME_DOWN" data-hex="0x4D" data-char="M" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <span>VOL -</span>
+              <span>Vol -</span>
             </button>
-            <button id="cmd-mute" data-cmd="MUTE" data-hex="0x4E" data-char="N" class="btn-press py-2.5 px-2 bg-slate-800 hover:bg-amber-600/30 text-amber-400 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
+            <button id="cmd-mute" data-cmd="MUTE" data-hex="0x4E" data-char="N" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-amber-600/30 text-amber-400 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
-              <span>MUTE</span>
+              <span>Mute</span>
             </button>
-            <button id="cmd-volup" data-cmd="VOLUME_UP" data-hex="0x4C" data-char="L" class="btn-press py-2.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
+            <button id="cmd-volup" data-cmd="VOLUME_UP" data-hex="0x4C" data-char="L" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <span>VOL +</span>
+              <span>Vol +</span>
             </button>
           </div>
 
           <!-- Media Controls (PLAY, PAUSE, STOP) -->
           <div class="grid grid-cols-3 gap-2">
-            <button id="cmd-play" data-cmd="PLAY" data-hex="0x49" data-char="I" class="btn-press py-2 px-2 bg-slate-800 hover:bg-emerald-600/30 text-emerald-400 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
+            <button id="cmd-play" data-cmd="PLAY" data-hex="0x49" data-char="I" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-emerald-600/30 text-emerald-400 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <span>PLAY</span>
+              <span>Play</span>
             </button>
-            <button id="cmd-pause" data-cmd="PAUSE" data-hex="0x4A" data-char="J" class="btn-press py-2 px-2 bg-slate-800 hover:bg-yellow-600/30 text-yellow-400 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
+            <button id="cmd-pause" data-cmd="PAUSE" data-hex="0x4A" data-char="J" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-yellow-600/30 text-yellow-400 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-              <span>PAUSE</span>
+              <span>Pause</span>
             </button>
-            <button id="cmd-stop" data-cmd="STOP" data-hex="0x4B" data-char="K" class="btn-press py-2 px-2 bg-slate-800 hover:bg-red-600/30 text-red-400 rounded-xl text-xs font-semibold flex flex-col items-center gap-1 border border-slate-700">
+            <button id="cmd-stop" data-cmd="STOP" data-hex="0x4B" data-char="K" class="btn-press py-1.5 px-2 bg-slate-800 hover:bg-red-600/30 text-red-400 rounded-xl text-xs font-medium flex flex-col items-center justify-center gap-0.5 border border-slate-700">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
-              <span>STOP</span>
+              <span>Stop</span>
             </button>
           </div>
         </div>
@@ -182,7 +223,7 @@
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
               <span class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">TARGET RECEIVER:</span>
-              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20">Android Smart TV 4K</span>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20">Android TV / STB 4K</span>
             </div>
             <div class="text-xs flex items-center gap-2 text-[var(--muted-foreground)]">
               <span>Power: <strong id="tv-power-state" class="text-emerald-500">ON</strong></span>
@@ -204,7 +245,7 @@
                   <span id="tv-mode-badge" class="bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded text-[12px] border border-blue-500/30">Launcher</span>
                 </div>
                 <div class="flex items-center gap-3 font-mono">
-                  <span id="tv-clock">14:05</span>
+                  <span id="tv-clock">16:15</span>
                   <span class="text-emerald-400">● BT SPP OK</span>
                 </div>
               </div>
@@ -223,12 +264,12 @@
                     <span class="text-xs font-semibold text-slate-300">Netflix</span>
                   </div>
                   <div class="tv-app-card p-3 rounded-xl bg-slate-900/70 border border-slate-800 flex flex-col items-center gap-1.5 text-center transition-all cursor-pointer" data-app-index="2">
-                    <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-sm">P</div>
-                    <span class="text-xs font-semibold text-slate-300">Prime Video</span>
+                    <div class="w-10 h-10 rounded-lg bg-pink-600 flex items-center justify-center text-white font-black text-sm">V</div>
+                    <span class="text-xs font-semibold text-slate-300">Vidio</span>
                   </div>
                   <div class="tv-app-card p-3 rounded-xl bg-slate-900/70 border border-slate-800 flex flex-col items-center gap-1.5 text-center transition-all cursor-pointer" data-app-index="3">
-                    <div class="w-10 h-10 rounded-lg bg-slate-700 flex items-center justify-center text-white font-black text-sm">⚙</div>
-                    <span class="text-xs font-semibold text-slate-300">Settings</span>
+                    <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-sm">D+</div>
+                    <span class="text-xs font-semibold text-slate-300">Disney+</span>
                   </div>
                 </div>
 
@@ -300,9 +341,9 @@
 
           <!-- Terminal Log Container -->
           <div id="serial-terminal" class="bg-slate-950 text-slate-300 font-mono text-[12px] p-3 rounded-xl border border-slate-800 h-44 overflow-y-auto space-y-1">
-            <div class="text-slate-500">// Terminal RFCOMM Serial Port Profile siap. Menunggu input remote...</div>
+            <div class="text-slate-500">// Terminal RFCOMM Serial Port Profile siap. Menunggu input remote / gestur touchpad...</div>
             <div class="text-emerald-400">[READY] Serial socket RFCOMM UUID: 00001101-0000-1000-8000-00805F9B34FB</div>
-            <div class="text-blue-400">[INFO] Terhubung ke HC-05 (00:21:13:01:42:08) @ 9600 bps 8N1</div>
+            <div class="text-blue-400">[INFO] Terhubung ke STB Android TV (00:21:13:01:42:08) @ 9600 bps 8N1</div>
           </div>
         </div>
 
@@ -313,11 +354,11 @@
     <!-- Footer Guide -->
     <footer class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 text-xs text-[var(--muted-foreground)] flex flex-wrap items-center justify-between gap-3">
       <div>
-        <strong>Peta Tombol & Byte:</strong> 
-        <span class="font-mono">UP: 0x41 ('A') | DOWN: 0x42 ('B') | LEFT: 0x43 ('C') | RIGHT: 0x44 ('D') | OK: 0x45 ('E') | POWER: 0x50 ('P')</span>
+        <strong>Peta Tombol &amp; Protokol:</strong> 
+        <span class="font-mono">UP: 0x41 | DOWN: 0x42 | LEFT: 0x43 | RIGHT: 0x44 | OK: 0x45 | SHORTCUTS: APP:[NAME]\n</span>
       </div>
       <div class="text-right">
-        Status: <span class="text-emerald-500 font-semibold">Semua Fungsi & Layout Terverifikasi</span>
+        Status: <span class="text-emerald-500 font-semibold">Touchpad &amp; Shortcuts Ready</span>
       </div>
     </footer>
 
@@ -325,7 +366,6 @@
 
   <!-- Simulation Logic Script -->
   <script>
-    // State variables
     let isConnected = true;
     let isAudioEnabled = true;
     let isTvOn = true;
@@ -336,6 +376,14 @@
     let focusedAppIndex = 0;
     const totalApps = 4;
     let osdTimeout = null;
+
+    // Shortcuts state
+    let shortcutsData = [
+      { name: "YouTube", cmd: "APP:YOUTUBE", color: "#CC0000", appIndex: 0 },
+      { name: "Netflix", cmd: "APP:NETFLIX", color: "#E50914", appIndex: 1 },
+      { name: "Vidio", cmd: "APP:VIDIO", color: "#FF007A", appIndex: 2 },
+      { name: "Disney+", cmd: "APP:DISNEY", color: "#0063E5", appIndex: 3 }
+    ];
 
     // Web Audio Sound Generator
     let audioCtx = null;
@@ -377,7 +425,6 @@
     const tvPlayerStatus = document.getElementById('tv-player-status');
     const appCards = document.querySelectorAll('.tv-app-card');
 
-    // Update App Focus
     function updateAppFocus() {
       appCards.forEach((card, idx) => {
         if (idx === focusedAppIndex) {
@@ -388,7 +435,6 @@
       });
     }
 
-    // Show OSD Volume
     function showVolumeOSD() {
       if (osdTimeout) clearTimeout(osdTimeout);
       osdVolBar.style.width = isMuted ? '0%' : volumeLevel + '%';
@@ -400,7 +446,6 @@
       }, 1800);
     }
 
-    // Append to Terminal Log
     function logPacket(cmd, hex, char) {
       const time = new Date().toLocaleTimeString('id-ID', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit', fractionalSecondDigits: 3 });
       const lat = Math.floor(Math.random() * 8) + 6;
@@ -419,7 +464,6 @@
       terminal.scrollTop = terminal.scrollHeight;
     }
 
-    // Process Remote Command
     function handleRemoteCommand(cmd, hex, char) {
       if (!isConnected) {
         const line = document.createElement('div');
@@ -435,7 +479,6 @@
       logPacket(cmd, hex, char);
       tvLastCmdBadge.innerText = `${cmd} (${hex})`;
 
-      // Handle Command actions
       switch (cmd) {
         case 'POWER':
           isTvOn = !isTvOn;
@@ -476,13 +519,12 @@
 
         case 'OK':
           if (!isTvOn) return;
-          // Open active app
           tvGridView.classList.add('hidden');
           tvVideoView.classList.remove('hidden');
           isVideoPlaying = true;
-          const appNames = ["YouTube 4K", "Netflix HDR", "Prime Video", "Settings"];
-          document.getElementById('tv-player-title').innerText = "Sedang Memutar: " + appNames[focusedAppIndex];
-          tvHeaderTitle.innerText = appNames[focusedAppIndex];
+          const appNames = ["YouTube 4K", "Netflix HDR", "Vidio Premier", "Disney+ Hotstar"];
+          document.getElementById('tv-player-title').innerText = "Sedang Memutar: " + (appNames[focusedAppIndex] || "Streaming App");
+          tvHeaderTitle.innerText = appNames[focusedAppIndex] || "App Player";
           tvModeBadge.innerText = "Media Player";
           tvPlayerStatus.innerText = "Status: Playing (1080p 60fps)";
           break;
@@ -556,12 +598,148 @@
 
     // Attach listeners to all remote buttons
     document.querySelectorAll('[data-cmd]').forEach(button => {
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', () => {
         const cmd = button.getAttribute('data-cmd');
         const hex = button.getAttribute('data-hex');
         const char = button.getAttribute('data-char');
         handleRemoteCommand(cmd, hex, char);
       });
+    });
+
+    // Touchpad and D-Pad Tabs Switcher
+    const tabDpad = document.getElementById('tab-dpad');
+    const tabTouchpad = document.getElementById('tab-touchpad');
+    const dpadContainer = document.getElementById('sim-dpad-container');
+    const touchpadContainer = document.getElementById('sim-touchpad-container');
+
+    tabDpad.addEventListener('click', () => {
+      tabDpad.className = "flex-1 py-1 px-2 rounded-lg text-xs font-bold bg-blue-600 text-white transition-all flex items-center justify-center gap-1";
+      tabTouchpad.className = "flex-1 py-1 px-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1";
+      dpadContainer.classList.remove('hidden');
+      touchpadContainer.classList.add('hidden');
+    });
+
+    tabTouchpad.addEventListener('click', () => {
+      tabTouchpad.className = "flex-1 py-1 px-2 rounded-lg text-xs font-bold bg-blue-600 text-white transition-all flex items-center justify-center gap-1";
+      tabDpad.className = "flex-1 py-1 px-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1";
+      touchpadContainer.classList.remove('hidden');
+      dpadContainer.classList.add('hidden');
+    });
+
+    // Touchpad Surface Drag / Gesture Handling
+    const touchpadSurface = document.getElementById('sim-touchpad-surface');
+    const touchPointer = document.getElementById('sim-touch-pointer');
+    let isTouching = false;
+    let startX = 0;
+    let startY = 0;
+    let swiped = false;
+
+    function handleTouchStart(x, y) {
+      isTouching = true;
+      startX = x;
+      startY = y;
+      swiped = false;
+      touchPointer.style.left = (x - 20) + 'px';
+      touchPointer.style.top = (y - 20) + 'px';
+      touchPointer.style.opacity = '1';
+    }
+
+    function handleTouchMove(x, y) {
+      if (!isTouching) return;
+      touchPointer.style.left = (x - 20) + 'px';
+      touchPointer.style.top = (y - 20) + 'px';
+
+      const dx = x - startX;
+      const dy = y - startY;
+      const threshold = 35;
+
+      if (!swiped && (Math.abs(dx) > threshold || Math.abs(dy) > threshold)) {
+        swiped = true;
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (dx > 0) {
+            handleRemoteCommand('RIGHT', '0x44', 'D');
+            pulseArrow('touch-ind-right');
+          } else {
+            handleRemoteCommand('LEFT', '0x43', 'C');
+            pulseArrow('touch-ind-left');
+          }
+        } else {
+          if (dy > 0) {
+            handleRemoteCommand('DOWN', '0x42', 'B');
+            pulseArrow('touch-ind-down');
+          } else {
+            handleRemoteCommand('UP', '0x41', 'A');
+            pulseArrow('touch-ind-up');
+          }
+        }
+        startX = x;
+        startY = y;
+      }
+    }
+
+    function handleTouchEnd() {
+      if (!isTouching) return;
+      isTouching = false;
+      touchPointer.style.opacity = '0';
+      if (!swiped) {
+        // Clean tap = OK
+        handleRemoteCommand('OK', '0x45', 'E');
+      }
+    }
+
+    function pulseArrow(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.className = el.className.replace('text-slate-600', 'text-blue-400 font-extrabold scale-110');
+      setTimeout(() => {
+        el.className = el.className.replace('text-blue-400 font-extrabold scale-110', 'text-slate-600');
+      }, 200);
+    }
+
+    touchpadSurface.addEventListener('mousedown', (e) => {
+      const rect = touchpadSurface.getBoundingClientRect();
+      handleTouchStart(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isTouching) return;
+      const rect = touchpadSurface.getBoundingClientRect();
+      handleTouchMove(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    window.addEventListener('mouseup', () => {
+      handleTouchEnd();
+    });
+
+    // App Shortcuts Click Handling
+    function setupShortcutButtons() {
+      const btns = document.querySelectorAll('.sim-shortcut-btn');
+      btns.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+          const sc = shortcutsData[idx];
+          if (!sc) return;
+          playBeep(850, 0.05);
+          logPacket(sc.cmd, 'STR', sc.name);
+          tvLastCmdBadge.innerText = `${sc.name} (${sc.cmd})`;
+
+          // Trigger TV app launch
+          focusedAppIndex = sc.appIndex;
+          updateAppFocus();
+          handleRemoteCommand('OK', '0x45', 'E');
+        });
+      });
+    }
+    setupShortcutButtons();
+
+    // Edit shortcuts button
+    document.getElementById('btn-edit-shortcuts-sim').addEventListener('click', () => {
+      const newName = prompt("Ubah Shortcut Slot 1 (Default: YouTube):", shortcutsData[0].name);
+      if (newName) {
+        shortcutsData[0].name = newName;
+        shortcutsData[0].cmd = "APP:" + newName.toUpperCase().replace(/\s+/g, '_');
+        document.querySelectorAll('.sim-shortcut-btn')[0].innerText = newName;
+        alert(`Shortcut Slot 1 berhasil diubah ke: ${newName} (${shortcutsData[0].cmd})`);
+      }
     });
 
     // Sound toggle
@@ -588,13 +766,13 @@
         btnToggleConn.innerText = "Putus Koneksi";
         btnToggleConn.className = "btn-press bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/30 px-3 py-1.5 rounded-lg font-medium";
         btLed.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
-        btText.innerText = "RFCOMM Connected (HC-05)";
+        btText.innerText = "RFCOMM Connected (Samsung S23 -> TV)";
         appDot.className = "w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]";
         appTitle.innerText = "Terhubung";
         
         const line = document.createElement('div');
         line.className = "text-emerald-400";
-        line.innerText = `[INFO] RFCOMM Socket terhubung kembali ke perangkat target.`;
+        line.innerText = `[INFO] RFCOMM Socket terhubung kembali ke Android TV / STB.`;
         terminal.appendChild(line);
       } else {
         btnToggleConn.innerText = "Hubungkan Ulang";
@@ -612,13 +790,11 @@
       terminal.scrollTop = terminal.scrollHeight;
     });
 
-    // Clock update
     setInterval(() => {
       const now = new Date();
       document.getElementById('tv-clock').innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
     }, 1000);
 
-    // Initial focus
     updateAppFocus();
   </script>
 </body>

@@ -75,14 +75,23 @@ class BluetoothService(private val context: Context) {
     }
 
     fun sendCommand(command: RemoteCommand): Boolean {
+        return sendBytes(command.bytes)
+    }
+
+    fun sendBytes(bytes: ByteArray): Boolean {
         return try {
-            outputStream?.write(command.bytes)
+            outputStream?.write(bytes)
             outputStream?.flush()
             true
         } catch (e: IOException) {
             _connectionState.value = BluetoothState.Disconnected
             false
         }
+    }
+
+    fun sendString(text: String): Boolean {
+        val payload = if (text.endsWith("\n")) text else "$text\n"
+        return sendBytes(payload.toByteArray(Charsets.UTF_8))
     }
 
     fun disconnect() {

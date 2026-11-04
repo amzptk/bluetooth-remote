@@ -23,10 +23,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🎮 Bluetooth Remote"
+                android:text="Bluetooth Remote"
+                android:textColor="@color/text_primary"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"/>
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Smart TV &amp; Android STB Controller"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
 
         </LinearLayout>
 
@@ -49,40 +57,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
 
                     <View
                         android:id="@+id/statusIndicator"
                         android:layout_width="12dp"
                         android:layout_height="12dp"
-                        android:background="@drawable/indicator_disconnected"/>
+                        android:background="@drawable/indicator_disconnected"
+                        android:layout_marginEnd="8dp"/>
 
                     <TextView
                         android:id="@+id/tvStatus"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
                         android:text="Tidak Terhubung"
-                        android:textSize="16sp"
-                        android:textColor="@color/status_disconnected"/>
+                        android:textColor="@color/status_disconnected"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvDeviceName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvDeviceName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="12dp">
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/btnConnect"
@@ -237,7 +245,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Navigation Pad -->
+        <!-- Navigation Pad & Touchpad -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -252,88 +260,245 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Navigasi"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="8dp"/>
-
-                <!-- UP -->
+                <!-- Navigation Header with Mode Switch -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginBottom="4dp">
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnUp"
-                        android:layout_width="80dp"
-                        android:layout_height="56dp"
-                        app:icon="@drawable/ic_arrow_up"
-                        app:iconSize="28dp"
-                        app:iconGravity="textStart"
-                        app:iconPadding="0dp"
-                        android:enabled="false"
-                        style="@style/Widget.Material3.Button.TonalButton"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Navigasi"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"/>
+
+                    <!-- D-Pad / Touchpad Toggle -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/touchpad_background"
+                        android:padding="3dp"
+                        android:gravity="center">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTabDpad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:minHeight="0dp"
+                            android:minWidth="0dp"
+                            android:insetLeft="0dp"
+                            android:insetRight="0dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:text="D-Pad"
+                            android:textSize="11sp"
+                            app:icon="@drawable/ic_dpad"
+                            app:iconSize="14dp"
+                            app:iconGravity="textStart"
+                            app:cornerRadius="14dp"
+                            style="@style/Widget.Material3.Button"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTabTouchpad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:minHeight="0dp"
+                            android:minWidth="0dp"
+                            android:insetLeft="0dp"
+                            android:insetRight="0dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:text="Touchpad"
+                            android:textSize="11sp"
+                            app:icon="@drawable/ic_touchpad"
+                            app:iconSize="14dp"
+                            app:iconGravity="textStart"
+                            app:cornerRadius="14dp"
+                            style="@style/Widget.Material3.Button.TonalButton"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- LEFT, OK, RIGHT -->
+                <!-- D-Pad Container -->
                 <LinearLayout
+                    android:id="@+id/layoutDpad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginBottom="4dp">
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnLeft"
-                        android:layout_width="80dp"
-                        android:layout_height="56dp"
-                        app:icon="@drawable/ic_arrow_left"
-                        app:iconSize="28dp"
-                        app:iconGravity="textStart"
-                        app:iconPadding="0dp"
-                        android:layout_marginEnd="4dp"
-                        android:enabled="false"
-                        style="@style/Widget.Material3.Button.TonalButton"/>
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnOk"
-                        android:layout_width="80dp"
-                        android:layout_height="56dp"
-                        android:text="OK"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginEnd="4dp"
-                        android:enabled="false"
-                        style="@style/Widget.Material3.Button"/>
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnRight"
-                        android:layout_width="80dp"
-                        android:layout_height="56dp"
-                        app:icon="@drawable/ic_arrow_right"
-                        app:iconSize="28dp"
-                        app:iconGravity="textStart"
-                        app:iconPadding="0dp"
-                        android:enabled="false"
-                        style="@style/Widget.Material3.Button.TonalButton"/>
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <!-- UP -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginBottom="4dp">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnUp"
+                            android:layout_width="80dp"
+                            android:layout_height="56dp"
+                            app:icon="@drawable/ic_arrow_up"
+                            app:iconSize="28dp"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            android:enabled="false"
+                            style="@style/Widget.Material3.Button.TonalButton"/>
+                    </LinearLayout>
+
+                    <!-- LEFT, OK, RIGHT -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginBottom="4dp">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnLeft"
+                            android:layout_width="80dp"
+                            android:layout_height="56dp"
+                            app:icon="@drawable/ic_arrow_left"
+                            app:iconSize="28dp"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            android:layout_marginEnd="4dp"
+                            android:enabled="false"
+                            style="@style/Widget.Material3.Button.TonalButton"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnOk"
+                            android:layout_width="80dp"
+                            android:layout_height="56dp"
+                            android:text="OK"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="4dp"
+                            android:enabled="false"
+                            style="@style/Widget.Material3.Button"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnRight"
+                            android:layout_width="80dp"
+                            android:layout_height="56dp"
+                            app:icon="@drawable/ic_arrow_right"
+                            app:iconSize="28dp"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            android:enabled="false"
+                            style="@style/Widget.Material3.Button.TonalButton"/>
+                    </LinearLayout>
+
+                    <!-- DOWN -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginBottom="8dp">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDown"
+                            android:layout_width="80dp"
+                            android:layout_height="56dp"
+                            app:icon="@drawable/ic_arrow_down"
+                            app:iconSize="28dp"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            android:enabled="false"
+                            style="@style/Widget.Material3.Button.TonalButton"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- DOWN -->
-                <LinearLayout
+                <!-- Touchpad Container -->
+                <FrameLayout
+                    android:id="@+id/layoutTouchpad"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginBottom="8dp">
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnDown"
-                        android:layout_width="80dp"
-                        android:layout_height="56dp"
-                        app:icon="@drawable/ic_arrow_down"
-                        app:iconSize="28dp"
-                        app:iconGravity="textStart"
-                        app:iconPadding="0dp"
-                        android:enabled="false"
-                        style="@style/Widget.Material3.Button.TonalButton"/>
-                </LinearLayout>
+                    android:layout_height="180dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/touchpad_background"
+                    android:visibility="gone">
+
+                    <!-- Touch Feedback Point -->
+                    <View
+                        android:id="@+id/touchIndicator"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/indicator_connected"
+                        android:alpha="0"
+                        android:visibility="visible"/>
+
+                    <!-- Direction arrows around the touchpad -->
+                    <TextView
+                        android:id="@+id/tvTouchUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|center_horizontal"
+                        android:text="▲"
+                        android:textColor="@color/text_secondary"
+                        android:alpha="0.4"
+                        android:paddingTop="6dp"/>
+
+                    <TextView
+                        android:id="@+id/tvTouchDown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:text="▼"
+                        android:textColor="@color/text_secondary"
+                        android:alpha="0.4"
+                        android:paddingBottom="6dp"/>
+
+                    <TextView
+                        android:id="@+id/tvTouchLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|start"
+                        android:text="◀"
+                        android:textColor="@color/text_secondary"
+                        android:alpha="0.4"
+                        android:paddingStart="10dp"/>
+
+                    <TextView
+                        android:id="@+id/tvTouchRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|end"
+                        android:text="▶"
+                        android:textColor="@color/text_secondary"
+                        android:alpha="0.4"
+                        android:paddingEnd="10dp"/>
+
+                    <!-- Center Instruction -->
+                    <LinearLayout
+                        android:id="@+id/layoutTouchpadHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tvTouchpadStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Touchpad Aktif"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="2dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Geser untuk Arah • Ketuk untuk OK"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="11sp"/>
+                    </LinearLayout>
+
+                </FrameLayout>
 
                 <!-- BACK, HOME, MENU -->
                 <LinearLayout
@@ -408,6 +573,166 @@
                         app:iconPadding="2dp"
                         android:enabled="false"
                         style="@style/Widget.Material3.Button.TonalButton"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- App Shortcuts Card (Customizable) -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aplikasi TV / STB"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ketuk untuk buka • Tekan lama untuk ubah"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="11sp"/>
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditShortcuts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="Ubah"
+                        android:textSize="11sp"
+                        app:icon="@drawable/ic_edit"
+                        app:iconSize="14dp"
+                        app:iconGravity="textStart"
+                        app:cornerRadius="12dp"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                </LinearLayout>
+
+                <!-- Grid of 4 Custom Shortcuts -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="6dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnShortcut1"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="2dp"
+                        android:text="YouTube"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:backgroundTint="#CC0000"
+                        app:cornerRadius="12dp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnShortcut2"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="2dp"
+                        android:text="Netflix"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:backgroundTint="#E50914"
+                        app:cornerRadius="12dp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnShortcut3"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="2dp"
+                        android:text="Vidio"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:backgroundTint="#FF007A"
+                        app:cornerRadius="12dp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnShortcut4"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="2dp"
+                        android:text="Disney+"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:backgroundTint="#0063E5"
+                        app:cornerRadius="12dp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button"/>
 
                 </LinearLayout>
 
