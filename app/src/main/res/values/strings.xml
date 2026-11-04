@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Bluetooth Remote</string>
+    <string name="select_device">Pilih Perangkat</string>
+</resources>

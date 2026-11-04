@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="24dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎮 Bluetooth Remote"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"/>
+
+        </LinearLayout>
+
+        <!-- Status Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:id="@+id/statusIndicator"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:background="@drawable/indicator_disconnected"/>
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Tidak Terhubung"
+                        android:textSize="16sp"
+                        android:textColor="@color/status_disconnected"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvDeviceName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp">
+
+                    <Button
+                        android:id="@+id/btnConnect"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="Hubungkan"
+                        style="@style/Widget.Material3.Button"/>
+
+                    <Button
+                        android:id="@+id/btnDisconnect"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:text="Putuskan"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Power Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnPower"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:text="⏻"
+                android:textSize="28sp"
+                android:backgroundTint="@color/power_red"
+                style="@style/Widget.Material3.Button"
+                android:enabled="false"/>
+
+        </LinearLayout>
+
+        <!-- Volume Controls -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Volume"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnVolDown"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="🔉 Vol -"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                    <Button
+                        android:id="@+id/btnMute"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="🔇"
+                        android:textSize="22sp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                    <Button
+                        android:id="@+id/btnVolUp"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="🔊 Vol +"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Navigation Pad -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Navigasi"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- UP -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="4dp">
+                    <Button
+                        android:id="@+id/btnUp"
+                        android:layout_width="80dp"
+                        android:layout_height="56dp"
+                        android:text="▲"
+                        android:textSize="22sp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+                </LinearLayout>
+
+                <!-- LEFT, OK, RIGHT -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="4dp">
+                    <Button
+                        android:id="@+id/btnLeft"
+                        android:layout_width="80dp"
+                        android:layout_height="56dp"
+                        android:text="◀"
+                        android:textSize="22sp"
+                        android:layout_marginEnd="4dp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+                    <Button
+                        android:id="@+id/btnOk"
+                        android:layout_width="80dp"
+                        android:layout_height="56dp"
+                        android:text="OK"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginEnd="4dp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button"/>
+                    <Button
+                        android:id="@+id/btnRight"
+                        android:layout_width="80dp"
+                        android:layout_height="56dp"
+                        android:text="▶"
+                        android:textSize="22sp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+                </LinearLayout>
+
+                <!-- DOWN -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp">
+                    <Button
+                        android:id="@+id/btnDown"
+                        android:layout_width="80dp"
+                        android:layout_height="56dp"
+                        android:text="▼"
+                        android:textSize="22sp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+                </LinearLayout>
+
+                <!-- BACK, HOME, MENU -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnBack"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="⬅ Back"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                    <Button
+                        android:id="@+id/btnHome"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="🏠"
+                        android:textSize="20sp"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                    <Button
+                        android:id="@+id/btnMenu"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="☰ Menu"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Media Controls -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Media"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnPlay"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="▶ Play"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                    <Button
+                        android:id="@+id/btnPause"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:text="⏸ Pause"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                    <Button
+                        android:id="@+id/btnStop"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="⏹ Stop"
+                        android:enabled="false"
+                        style="@style/Widget.Material3.Button.TonalButton"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>
