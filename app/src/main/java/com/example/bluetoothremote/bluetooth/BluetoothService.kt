@@ -14,7 +14,7 @@ import java.util.UUID
 class BluetoothService(private val context: Context) {
 
     companion object {
-        // Standard SerialPortProfile UUID
+        // Standard SerialPortProfile UUID (SPP)
         private val SPP_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     }
 
@@ -40,41 +40,91 @@ class BluetoothService(private val context: Context) {
                         return@launch
                     }
 
-                // Close existing connection
-                closeSocket()
-
-                socket = device.createRfcommSocketToServiceRecord(SPP_UUID)
+                // Batalkan discovery untuk menghemat bandwidth Bluetooth
                 try {
                     bluetoothAdapter?.cancelDiscovery()
                 } catch (e: SecurityException) {
                     // ignore
                 }
 
-                try {
-                    socket?.connect()
-                    outputStream = socket?.outputStream
+                // Tutup koneksi lama dan beri jeda stack Bluetooth
+                closeSocket()
+                delay(150)
 
-                    val deviceName = try { device.name } catch (e: SecurityException) { deviceAddress }
-                    _connectionState.value = BluetoothState.Connected(deviceName ?: deviceAddress)
-                } catch (e: IOException) {
-                    // Try fallback connection method
-                    try {
-                        val fallbackSocket = device.javaClass
-                            .getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
+                var connected = false
+                var lastErrorMessage = ""
+
+                // Strategi 1 s.d 4: Coba berbagai mode soket RFCOMM (Insecure & Secure SPP serta Reflection)
+                val strategies: List<Pair<String, () -> BluetoothSocket>> = listOf(
+                    "Insecure SPP" to { device.createInsecureRfcommSocketToServiceRecord(SPP_UUID) },
+                    "Standard SPP" to { device.createRfcommSocketToServiceRecord(SPP_UUID) },
+                    "Reflection Insecure Ch1" to {
+                        device.javaClass.getMethod("createInsecureRfcommSocket", Int::class.javaPrimitiveType)
                             .invoke(device, 1) as BluetoothSocket
-                        socket = fallbackSocket
-                        fallbackSocket.connect()
-                        outputStream = fallbackSocket.outputStream
-                        val deviceName = try { device.name } catch (ex: SecurityException) { deviceAddress }
+                    },
+                    "Reflection Secure Ch1" to {
+                        device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
+                            .invoke(device, 1) as BluetoothSocket
+                    }
+                )
+
+                for ((name, createSocket) in strategies) {
+                    var candidateSocket: BluetoothSocket? = null
+                    try {
+                        candidateSocket = createSocket()
+                        candidateSocket.connect()
+
+                        socket = candidateSocket
+                        outputStream = candidateSocket.outputStream
+                        val deviceName = try { device.name } catch (e: SecurityException) { deviceAddress }
                         _connectionState.value = BluetoothState.Connected(deviceName ?: deviceAddress)
-                    } catch (e2: Exception) {
-                        closeSocket()
-                        _connectionState.value = BluetoothState.Error("Gagal terhubung: ${e2.message}")
+                        connected = true
+                        break
+                    } catch (e: Exception) {
+                        lastErrorMessage = e.message ?: "Koneksi gagal"
+                        try {
+                            candidateSocket?.close()
+                        } catch (ignored: Exception) { }
+                        delay(200)
                     }
                 }
+
+                // Strategi 5: Jika belum terhubung, coba UUID yang diiklankan oleh perangkat (jika ada)
+                if (!connected) {
+                    val parcelUuids = try { device.uuids } catch (e: SecurityException) { null }
+                    if (parcelUuids != null) {
+                        for (pUuid in parcelUuids) {
+                            val targetUuid = pUuid.uuid
+                            if (targetUuid == SPP_UUID) continue
+                            var candidateSocket: BluetoothSocket? = null
+                            try {
+                                candidateSocket = device.createInsecureRfcommSocketToServiceRecord(targetUuid)
+                                candidateSocket.connect()
+
+                                socket = candidateSocket
+                                outputStream = candidateSocket.outputStream
+                                val deviceName = try { device.name } catch (e: SecurityException) { deviceAddress }
+                                _connectionState.value = BluetoothState.Connected(deviceName ?: deviceAddress)
+                                connected = true
+                                break
+                            } catch (e: Exception) {
+                                lastErrorMessage = e.message ?: "Koneksi gagal"
+                                try { candidateSocket?.close() } catch (ignored: Exception) { }
+                                delay(200)
+                            }
+                        }
+                    }
+                }
+
+                if (!connected) {
+                    closeSocket()
+                    _connectionState.value = BluetoothState.Error("Gagal terhubung ($lastErrorMessage). Pastikan perangkat target siap menerima koneksi Bluetooth SPP/Serial.")
+                }
+
             } catch (e: SecurityException) {
                 _connectionState.value = BluetoothState.Error("Izin Bluetooth ditolak")
             } catch (e: Exception) {
+                closeSocket()
                 _connectionState.value = BluetoothState.Error("Koneksi gagal: ${e.message}")
             }
         }

@@ -69,13 +69,13 @@ jobs:
         if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.1
-          name: "Bluetooth Remote v1.0.1"
+          tag_name: v1.0.2
+          name: "Bluetooth Remote v1.0.2"
           body: |
-            ### Perbaikan (Bug Fixes):
-            - Memperbaiki Force Close saat menekan tombol "Hubungkan" (perbaikan Action Bar decor collision & tema Material3 NoActionBar).
-            - Penanganan izin Bluetooth yang lebih aman dan kompatibel untuk Android 12, 13, 14, 15.
-            - Menambahkan fallback dan exception handling saat inisialisasi soket Bluetooth.
+            ### Perbaikan (Bug Fixes v1.0.2):
+            - Menambahkan dukungan multi-strategi koneksi RFCOMM (Insecure SPP, Secure SPP, Reflection Ch1, dan Advertised Device UUIDs).
+            - Mengatasi error `read failed, socket might closed or timeout, read out: -1`.
+            - Membersihkan soket gagal dan memberi jeda stack Bluetooth sebelum koneksi ulang.
           files: app/build/outputs/apk/debug/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
