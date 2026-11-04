@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bluetoothService: BluetoothService
     private val bluetoothAdapter: BluetoothAdapter? by lazy {
-        (getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter
+        (getSystemService(BLUETOOTH_SERVICE) as? BluetoothManager)?.adapter
     }
 
     private var shortcuts: MutableList<AppShortcut> = mutableListOf()

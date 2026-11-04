@@ -22,7 +22,7 @@ class DeviceListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDeviceListBinding
     private val bluetoothAdapter: BluetoothAdapter? by lazy {
-        (getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter
+        (getSystemService(BLUETOOTH_SERVICE) as? BluetoothManager)?.adapter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,18 +30,37 @@ class DeviceListActivity : AppCompatActivity() {
         binding = ActivityDeviceListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        try {
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        } catch (e: Exception) {
+            // Fallback if action bar cannot be attached
+        }
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         setupDeviceList()
     }
 
     private fun setupDeviceList() {
         try {
+            if (bluetoothAdapter == null) {
+                Toast.makeText(this, "Bluetooth tidak tersedia di perangkat ini", Toast.LENGTH_SHORT).show()
+                finish()
+                return
+            }
+
+            if (!bluetoothAdapter!!.isEnabled) {
+                Toast.makeText(this, "Bluetooth belum aktif", Toast.LENGTH_SHORT).show()
+                finish()
+                return
+            }
+
             val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
 
             if (pairedDevices.isNullOrEmpty()) {
-                Toast.makeText(this, "Tidak ada perangkat yang sudah dipasangkan. Pasangkan perangkat di Pengaturan Bluetooth.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Tidak ada perangkat yang sudah dipasangkan. Pasangkan perangkat di Pengaturan Bluetooth HP terlebih dahulu.", Toast.LENGTH_LONG).show()
                 return
             }
 
@@ -59,11 +78,14 @@ class DeviceListActivity : AppCompatActivity() {
         } catch (e: SecurityException) {
             Toast.makeText(this, "Izin Bluetooth tidak diberikan", Toast.LENGTH_SHORT).show()
             finish()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Gagal memuat daftar perangkat: ${e.message}", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
+        finish()
         return true
     }
 }
@@ -83,12 +105,14 @@ class DeviceAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val device = devices[position]
         try {
-            holder.binding.tvDeviceName.text = device.name ?: "Unknown Device"
+            val name = try { device.name } catch (e: SecurityException) { null } ?: "Unknown Device"
+            holder.binding.tvDeviceName.text = name
             holder.binding.tvDeviceAddress.text = device.address
             holder.itemView.setOnClickListener { onDeviceClick(device) }
-        } catch (e: SecurityException) {
-            holder.binding.tvDeviceName.text = "Unknown Device"
+        } catch (e: Exception) {
+            holder.binding.tvDeviceName.text = "Device"
             holder.binding.tvDeviceAddress.text = device.address
+            holder.itemView.setOnClickListener { onDeviceClick(device) }
         }
     }
 

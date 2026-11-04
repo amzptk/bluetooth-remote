@@ -19,7 +19,7 @@ class BluetoothService(private val context: Context) {
     }
 
     private val bluetoothAdapter: BluetoothAdapter? by lazy {
-        (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
+        (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)?.adapter
     }
 
     private var socket: BluetoothSocket? = null
@@ -44,7 +44,11 @@ class BluetoothService(private val context: Context) {
                 closeSocket()
 
                 socket = device.createRfcommSocketToServiceRecord(SPP_UUID)
-                bluetoothAdapter?.cancelDiscovery()
+                try {
+                    bluetoothAdapter?.cancelDiscovery()
+                } catch (e: SecurityException) {
+                    // ignore
+                }
 
                 try {
                     socket?.connect()
@@ -70,6 +74,8 @@ class BluetoothService(private val context: Context) {
                 }
             } catch (e: SecurityException) {
                 _connectionState.value = BluetoothState.Error("Izin Bluetooth ditolak")
+            } catch (e: Exception) {
+                _connectionState.value = BluetoothState.Error("Koneksi gagal: ${e.message}")
             }
         }
     }
