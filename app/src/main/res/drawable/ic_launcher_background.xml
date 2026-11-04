@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Deep Material Blue base -->
+    <path
+        android:fillColor="#0D47A1"
+        android:pathData="M0,0h108v108h-108z"/>
+    <!-- Subtle circular accent disc in background -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M54,54m-42,0a42,42 0 1,0 84,0a42,42 0 1,0 -84,0"/>
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M54,54m-32,0a32,32 0 1,0 64,0a32,32 0 1,0 -64,0"/>
+</vector>
