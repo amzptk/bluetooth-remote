@@ -74,12 +74,17 @@ class BluetoothService(private val context: Context) {
                         candidateSocket = createSocket()
                         candidateSocket.connect()
 
-                        socket = candidateSocket
-                        outputStream = candidateSocket.outputStream
-                        val deviceName = try { device.name } catch (e: SecurityException) { deviceAddress }
-                        _connectionState.value = BluetoothState.Connected(deviceName ?: deviceAddress)
-                        connected = true
-                        break
+                        val stream = candidateSocket.outputStream
+                        if (stream != null) {
+                            socket = candidateSocket
+                            outputStream = stream
+                            val deviceName = try { device.name } catch (e: SecurityException) { deviceAddress }
+                            _connectionState.value = BluetoothState.Connected(deviceName ?: deviceAddress)
+                            connected = true
+                            break
+                        } else {
+                            candidateSocket.close()
+                        }
                     } catch (e: Exception) {
                         lastErrorMessage = e.message ?: "Koneksi gagal"
                         try {
@@ -101,12 +106,17 @@ class BluetoothService(private val context: Context) {
                                 candidateSocket = device.createInsecureRfcommSocketToServiceRecord(targetUuid)
                                 candidateSocket.connect()
 
-                                socket = candidateSocket
-                                outputStream = candidateSocket.outputStream
-                                val deviceName = try { device.name } catch (e: SecurityException) { deviceAddress }
-                                _connectionState.value = BluetoothState.Connected(deviceName ?: deviceAddress)
-                                connected = true
-                                break
+                                val stream = candidateSocket.outputStream
+                                if (stream != null) {
+                                    socket = candidateSocket
+                                    outputStream = stream
+                                    val deviceName = try { device.name } catch (e: SecurityException) { deviceAddress }
+                                    _connectionState.value = BluetoothState.Connected(deviceName ?: deviceAddress)
+                                    connected = true
+                                    break
+                                } else {
+                                    candidateSocket.close()
+                                }
                             } catch (e: Exception) {
                                 lastErrorMessage = e.message ?: "Koneksi gagal"
                                 try { candidateSocket?.close() } catch (ignored: Exception) { }
@@ -135,12 +145,16 @@ class BluetoothService(private val context: Context) {
     }
 
     fun sendBytes(bytes: ByteArray): Boolean {
+        val stream = outputStream ?: return false
         return try {
-            outputStream?.write(bytes)
-            outputStream?.flush()
+            stream.write(bytes)
+            stream.flush()
             true
-        } catch (e: IOException) {
-            _connectionState.value = BluetoothState.Disconnected
+        } catch (e: Exception) {
+            serviceScope.launch {
+                closeSocket()
+                _connectionState.value = BluetoothState.Disconnected
+            }
             false
         }
     }
