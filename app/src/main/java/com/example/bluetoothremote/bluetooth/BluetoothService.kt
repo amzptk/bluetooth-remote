@@ -106,7 +106,7 @@ class BluetoothService(private val context: Context) {
                 "Bluetooth Remote",
                 "STB & Smart TV Controller",
                 "Android",
-                BluetoothHidDevice.SUBCLASS1_COMBO,
+                BluetoothHidDevice.SUBCLASS1_KEYBOARD,
                 HidData.HID_DESCRIPTOR
             )
 
