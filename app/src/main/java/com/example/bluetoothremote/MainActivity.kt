@@ -177,13 +177,20 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupTouchpad() {
         binding.layoutTouchpad.setOnTouchListener { view, event ->
+            // Prevent parent ScrollView from intercepting vertical touch/scroll events
+            view.parent?.requestDisallowInterceptTouchEvent(true)
+
             if (!binding.btnOk.isEnabled) {
                 // Not connected
-                return@setOnTouchListener false
+                if (event.actionMasked == MotionEvent.ACTION_UP || event.actionMasked == MotionEvent.ACTION_CANCEL) {
+                    view.parent?.requestDisallowInterceptTouchEvent(false)
+                }
+                return@setOnTouchListener true
             }
 
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    view.parent?.requestDisallowInterceptTouchEvent(true)
                     touchStartX = event.x
                     touchStartY = event.y
                     isSwiped = false
@@ -191,18 +198,19 @@ class MainActivity : AppCompatActivity() {
                     // Position and show touch indicator
                     binding.touchIndicator.x = event.x - (binding.touchIndicator.width / 2f)
                     binding.touchIndicator.y = event.y - (binding.touchIndicator.height / 2f)
-                    binding.touchIndicator.animate().alpha(0.7f).setDuration(100).start()
+                    binding.touchIndicator.animate().alpha(0.7f).setDuration(80).start()
                     true
                 }
 
                 MotionEvent.ACTION_MOVE -> {
+                    view.parent?.requestDisallowInterceptTouchEvent(true)
                     binding.touchIndicator.x = event.x - (binding.touchIndicator.width / 2f)
                     binding.touchIndicator.y = event.y - (binding.touchIndicator.height / 2f)
 
                     val dx = event.x - touchStartX
                     val dy = event.y - touchStartY
 
-                    if (!isSwiped && (abs(dx) > SWIPE_THRESHOLD || abs(dy) > SWIPE_THRESHOLD)) {
+                    if (abs(dx) > SWIPE_THRESHOLD || abs(dy) > SWIPE_THRESHOLD) {
                         isSwiped = true
                         if (abs(dx) > abs(dy)) {
                             if (dx > 0) {
@@ -229,6 +237,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    view.parent?.requestDisallowInterceptTouchEvent(false)
                     binding.touchIndicator.animate().alpha(0f).setDuration(150).start()
 
                     if (!isSwiped) {
@@ -241,7 +250,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                else -> false
+                else -> {
+                    view.parent?.requestDisallowInterceptTouchEvent(false)
+                    false
+                }
             }
         }
     }
