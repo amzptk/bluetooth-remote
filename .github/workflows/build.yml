@@ -69,13 +69,13 @@ jobs:
         if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.3
-          name: "Bluetooth Remote v1.0.3"
+          tag_name: v1.1.0
+          name: "Bluetooth Remote v1.1.0 (STB Native Remote)"
           body: |
-            ### Perbaikan (Bug Fixes v1.0.3):
-            - Validasi ketat `outputStream` sebelum transmisi byte (mencegah false-positive success saat stream null).
-            - Menambahkan feedback status visual real-time di UI saat tombol ditekan (misal: "Terkirim: UP ('A')").
-            - Penanganan socket disconnect yang lebih responsif saat pengiriman data gagal.
+            ### Fitur Baru & Perbaikan (v1.1.0):
+            - 🎮 **Dukungan Penuh Bluetooth HID Remote untuk STB / Smart TV**: HP kini berfungsi sebagai remote fisik resmi (Keyboard & Mouse nirkabel).
+            - 📺 **Tombol Navigasi Asli STB**: Tombol UP, DOWN, LEFT, RIGHT, OK, BACK, HOME, MENU, VOL+, VOL-, MUTE, dan POWER mengirim sinyal USB HID Keyboard (`DPAD_UP`, `ENTER`, `ESCAPE`, dsb.) yang langsung dikenali dan direspons oleh STB tanpa memerlukan aplikasi tambahan di STB.
+            - ⚡ **Dual Engine (HID + SPP)**: Tetap mendukung komunikasi serial jika dihubungkan ke modul mikrokontroler (Arduino/ESP32).
           files: app/build/outputs/apk/debug/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
