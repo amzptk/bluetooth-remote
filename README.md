@@ -4,12 +4,20 @@ Aplikasi remote control Bluetooth untuk mengendalikan Smart TV dan perangkat rum
 
 ## Fitur Utama
 
-- 🔵 Scan dan temukan perangkat Bluetooth yang sudah dipasangkan
-- 🔗 Koneksi ke perangkat via RFCOMM socket (Serial Port Profile)
-- 🎮 UI remote control lengkap dengan tombol navigasi, media, dan volume
-- 📶 Indikator status koneksi real-time
-- 🔄 Tombol reconnect jika koneksi terputus
-- 🌙 Dark mode Material Design 3
+- 🔵 **Scan & Koneksi Cepat**: Temukan dan hubungkan ke Smart TV, Android STB, atau modul Bluetooth (HC-05/06) via RFCOMM / Serial Port Profile (SPP).
+- 🎮 **Dual Mode Navigasi**:
+  - **Mode D-Pad**: Tombol navigasi klasik 4 arah (Up, Down, Left, Right) dan tombol OK di tengah.
+  - **Mode Touchpad Interaktif**: Area sentuh gestur usap (swipe) untuk navigasi dinamis, tap untuk klik/OK, efek glowing pointer & indikator arah sentuhan, serta proteksi anti-scroll lock agar layar tidak ikut tergeser saat menyentuh touchpad.
+- ⚡ **Shortcut Aplikasi TV / STB yang Dapat Dikustomisasi**:
+  - Tombol akses cepat ke aplikasi favorit (YouTube, Netflix, Vidio, Disney+ Hotstar, Prime Video, Spotify, Web Browser, Kodi, atau command custom).
+  - Dialog kustomisasi untuk mengganti nama tombol dan command pengiriman string secara real-time tersimpan permanen di perangkat.
+- 🎛️ **Kontrol Media & Sistem Esensial**:
+  - Tombol Power, Back, Home, dan Menu (desain ikon Material khusus, bebas teks terpotong pada Samsung One UI / Galaxy S23).
+  - Kontrol Volume (Volume Up, Volume Down, Mute).
+  - Kontrol Pemutar Media (Play, Pause, Stop).
+- 📳 **Haptic Feedback**: Getaran responsif saat tombol ditekan untuk feedback sentuhan yang nyata.
+- 🎨 **Modern Material Design 3**: Tampilan Dark Mode modern yang elegan, hemat baterai, dan dilengkapi Official Material Bluetooth App Launcher Icon.
+- 📶 **Status Koneksi Real-time**: Indikator visual status perangkat (Terhubung / Terputus) beserta dialog pemilih perangkat paired.
 
 ## Persyaratan
 
