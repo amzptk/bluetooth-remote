@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.bluetoothremote.bluetooth.BluetoothService
 import com.example.bluetoothremote.bluetooth.BluetoothState
 import com.example.bluetoothremote.bluetooth.RemoteCommand
